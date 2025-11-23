@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>najwan | Ultimate Security Roadmap</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --neon-red: #ff3333;
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --hex-bg: #050505;
+            --glass: rgba(10, 10, 10, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--hex-bg);
+            color: #c0c0c0;
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+            cursor: crosshair; /* Hacker feel */
+        }
+
+        /* --- ADVANCED BACKGROUNDS --- */
+        #matrix-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; opacity: 0.15; pointer-events: none;
+        }
+
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* --- INTRO ANIMATION --- */
+        #intro-layer {
+            position: fixed; inset: 0; z-index: 100;
+            background: #000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        
+        .loader-bar {
+            width: 300px; height: 4px; background: #111; margin-top: 20px;
+            position: relative; overflow: hidden;
+        }
+        .loader-progress {
+            position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+            transition: width 0.1s linear;
+        }
+
+        /* --- UI COMPONENTS --- */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s;
+        }
+        .glass-panel:hover {
+            border-color: rgba(0, 255, 65, 0.3);
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-btn::before {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 2px;
+            background: var(--neon-green); transform: scaleY(0); transition: transform 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.03); color: #fff; padding-left: 1.25rem; }
+        .nav-btn.active {
+            background: linear-gradient(90deg, rgba(0,255,65,0.1), transparent);
+            color: #fff;
+        }
+        .nav-btn.active::before { transform: scaleY(1); }
+
+        /* Terminal Window */
+        .terminal-window {
+            background: rgba(5, 5, 5, 0.95);
+            border: 1px solid #333;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        .terminal-header {
+            background: #111; padding: 6px 12px;
+            border-bottom: 1px solid #222;
+            display: flex; gap: 6px; align-items: center;
+        }
+        .dot { width: 10px; height: 10px; rounded-full; border-radius: 50%; }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glitch-effect { position: relative; }
+        .glitch-effect::before, .glitch-effect::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .glitch-effect:hover::before { animation: glitch 0.3s infinite; color: var(--neon-red); clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%); transform: translate(-2px, -2px); opacity: 0.7; }
+        .glitch-effect:hover::after { animation: glitch 0.3s infinite reverse; color: var(--neon-blue); clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%); transform: translate(2px, 2px); opacity: 0.7; }
+
+        @keyframes glitch { 0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) } 40% { transform: translate(-2px, -2px) } 60% { transform: translate(2px, 2px) } 80% { transform: translate(2px, -2px) } 100% { transform: translate(0) } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-green); }
+
+        /* Markdown Styles for AI Response */
+        .markdown-body p { margin-bottom: 0.5em; }
+        .markdown-body code { background: rgba(255,255,255,0.1); padding: 2px 4px; rounded: 3px; color: #e0e0e0; }
+        .markdown-body pre { background: #111; padding: 10px; rounded: 5px; overflow-x: auto; margin: 10px 0; border: 1px solid #333; }
+        .markdown-body strong { color: var(--neon-green); }
+        .markdown-body ul { list-style-type: disc; padding-left: 20px; margin-bottom: 0.5em; }
+    </style>
+</head>
+<body>
+
+    <!-- LAYER 0: VISUALS -->
+    <canvas id="matrix-canvas"></canvas>
+    <div class="bg-grid"></div>
+
+    <!-- LAYER 1: INTRO SEQUENCE -->
+    <div id="intro-layer">
+        <div class="font-mono text-green-500 text-xl mb-4" id="intro-text">INITIALIZING...</div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="intro-bar"></div>
+        </div>
+        <div class="mt-4 font-mono text-xs text-gray-500" id="intro-sub">Decrypting Security Protocols</div>
+    </div>
+
+    <!-- LAYER 2: APP INTERFACE -->
+    <div id="app" class="relative z-10 flex h-screen w-full opacity-0 transition-opacity duration-1000 hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-20 lg:w-80 bg-black/80 border-r border-white/10 flex flex-col backdrop-blur-md">
+            <!-- Branding -->
+            <div class="h-20 flex items-center justify-center lg:justify-start lg:px-6 border-b border-white/5 relative overflow-hidden group">
+                <div class="absolute inset-0 bg-green-500/5 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                <i data-lucide="shield-alert" class="w-8 h-8 text-green-500 group-hover:rotate-12 transition-transform"></i>
+                <div class="hidden lg:block ml-3">
+                    <h1 class="text-xl font-bold tracking-widest text-white glitch-effect" data-text="CYBER_NEXUS">CYBER_NEXUS</h1>
+                    <p class="text-[10px] text-green-500/70 tracking-[0.3em] font-bold">ETHICAL HACKING ROADMAP</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav id="nav-container" class="flex-1 overflow-y-auto py-6 space-y-1 px-3"></nav>
+
+            <!-- User Status -->
+            <div class="p-4 bg-black/60 border-t border-white/5 text-[10px] text-gray-400 font-mono">
+                <div class="hidden lg:flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>VPN: <span class="text-green-400">CONNECTED</span></span>
+                    </div>
+                    <span>ID: <span class="text-blue-400">ROOT</span></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEW -->
+        <main class="flex-1 flex flex-col min-w-0 bg-transparent relative">
+            
+            <!-- Scanline Overlay -->
+            <div class="absolute inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_2px,3px_100%]"></div>
+
+            <!-- Header -->
+            <header class="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-black/40 backdrop-blur-sm z-20">
+                <div class="flex items-center gap-2 text-xs font-mono">
+                    <span class="text-gray-500">root@nexus:~</span>
+                    <span class="text-gray-600">/</span>
+                    <span id="header-phase" class="text-green-500/80">PHASE_0</span>
+                    <span class="text-gray-600">/</span>
+                    <span id="header-title" class="text-white font-bold tracking-wide">DASHBOARD</span>
+                </div>
+                <div class="flex gap-4">
+                    <button class="text-gray-500 hover:text-white transition"><i data-lucide="terminal" class="w-4 h-4"></i></button>
+                    <button class="text-gray-500 hover:text-white transition"><i data-lucide="cpu" class="w-4 h-4"></i></button>
+                </div>
+            </header>
+
+            <!-- Content Container -->
+            <div id="content-area" class="flex-1 overflow-y-auto p-6 lg:p-12 z-10 scrollbar-hide"></div>
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        const apiKey = ""; // API Key injected by environment
+
+        // --- GEMINI API HELPER ---
+        async function callGemini(prompt, systemInstruction = "You are a helpful cybersecurity expert assistant.") {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+                } catch (e) {
+                    if (i === 4) return "Connection to AI Core failed. Please try again later.";
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+        }
+
+        // --- 1. CURRICULUM DATA (STEP-BY-STEP ROADMAP) ---
+        const curriculum = [
+            {
+                id: 'dashboard',
+                phase: 'OVERVIEW',
+                title: 'Mission Control',
+                icon: 'layout-dashboard',
+                render: () => `
+                    <div class="fade-in max-w-6xl mx-auto">
+                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tighter">
+                            WELCOME <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">OPERATOR</span>
+                        </h1>
+                        <p class="text-gray-400 text-lg mb-10 max-w-2xl">
+                            Initialize your training path. This platform simulates a real-world offensive security environment. Proceed through the phases sequentially to master the art of ethical hacking.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                            ${[
+                                {t:'Modules', v:'8 PHASES', i:'book-open', c:'text-blue-400'},
+                                {t:'Simulators', v:'ACTIVE', i:'cpu', c:'text-green-400'},
+                                {t:'AI Core', v:'ONLINE', i:'bot', c:'text-purple-400'}
+                            ].map(k => `
+                                <div class="glass-panel p-6 rounded-lg relative overflow-hidden group cursor-pointer">
+                                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110">
+                                        <i data-lucide="${k.i}" class="w-16 h-16 ${k.c}"></i>
+                                    </div>
+                                    <div class="text-xs text-gray-500 font-bold tracking-widest mb-2">${k.t.toUpperCase()}</div>
+                                    <div class="text-3xl font-mono font-bold text-white group-hover:text-green-400 transition-colors">${k.v}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="glass-panel p-1 rounded-lg">
+                            <div class="bg-black/80 rounded p-4 font-mono text-xs text-gray-500 h-48 overflow-y-auto custom-scroll">
+                                <p class="mb-2"><span class="text-green-500">[SYSTEM]</span> Core modules loaded successfully.</p>
+                                <p class="mb-2"><span class="text-purple-500">[AI]</span> Neural Interface connected to Gemini-2.5-Flash.</p>
+                                <p class="mb-2"><span class="text-purple-500">[TRAINING]</span> Phase 1 through 7 ready for deployment.</p>
+                                <p class="animate-pulse"><span class="text-green-500">root@nexus:~$</span> Waiting for module selection...</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'phase0',
+                phase: 'PHASE 0',
+                title: 'Fundamentals',
+                icon: 'book',
+                render: () => `
+                    <div class="fade-in max-w-5xl">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="p-3 bg-blue-500/10 rounded border border-blue-500/30 text-blue-400"><i data-lucide="shield" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">Fundamentals & Ethics</h1>
+                                <p class="text-gray-400 text-sm">Prerequisite Knowledge</p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-6">
+                                <div class="glass-panel p-6 rounded-lg border-l-4 border-l-blue-500">
+                                    <h3 class="text-lg font-bold text-white mb-2">The CIA Triad</h3>
+                                    <p class="text-sm text-gray-400 mb-4">The heart of information security.</p>
+                                    <ul class="space-y-2 text-sm text-gray-300">
+                                        <li class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-green-400"></i> <b>Confidentiality:</b> Encryption, Access Control.</li>
+                                        <li class="flex items-center gap-2"><i data-lucide="file-check" class="w-4 h-4 text-green-400"></i> <b>Integrity:</b> Hashing, Digital Signatures.</li>
+                                        <li class="flex items-center gap-2"><i data-lucide="server" class="w-4 h-4 text-green-400"></i> <b>Availability:</b> Redundancy, DDoS protection.</li>
+                                    </ul>
+                                </div>
+                                <div class="glass-panel p-6 rounded-lg border-l-4 border-l-red-500">
+                                    <h3 class="text-lg font-bold text-white mb-2">Legal Boundaries</h3>
+                                    <p class="text-sm text-red-200">
+                                        <b>Rule #1:</b> Never scan a target without written permission.
+                                        <br><br>
+                                        Violating this can lead to prosecution under the Computer Fraud and Abuse Act (CFAA) in the US or Computer Misuse Act in the UK.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="terminal-window rounded-lg p-1">
+                                <div class="terminal-header"><div class="dot bg-red-500"></div><div class="dot bg-yellow-500"></div><div class="dot bg-green-500"></div></div>
+                                <div class="bg-black p-4 text-xs font-mono text-gray-400 h-64 overflow-hidden">
+                                    <p class="text-green-500">root@kali:~$ man hacker_ethics</p>
+                                    <br>
+                                    <p>NAME</p>
+                                    <p class="pl-4">hacker_ethics - guidelines for white hat operations</p>
+                                    <br>
+                                    <p>DESCRIPTION</p>
+                                    <p class="pl-4">1. Do no harm.</p>
+                                    <p class="pl-4">2. Respect privacy.</p>
+                                    <p class="pl-4">3. Disclose vulnerabilities responsibly.</p>
+                                    <br>
+                                    <p class="animate-pulse">_</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'phase1',
+                phase: 'PHASE 1',
+                title: 'Linux & Networking',
+                icon: 'terminal',
+                render: () => `
+                    <div class="fade-in max-w-5xl">
+                        <div class="flex items-center gap-4 mb-8">
+                             <div class="p-3 bg-yellow-500/10 rounded border border-yellow-500/30 text-yellow-400"><i data-lucide="server" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">Linux & Networking</h1>
+                                <p class="text-gray-400 text-sm">The Hacker's OS and the Terrain</p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div class="glass-panel p-6 rounded-lg">
+                                <h3 class="text-white font-bold mb-4">Networking 101</h3>
+                                <div class="space-y-3 text-sm text-gray-400 font-mono">
+                                    <div class="flex justify-between border-b border-gray-800 pb-1"><span>IP Address</span><span class="text-green-400">Digital Identity (192.168.x.x)</span></div>
+                                    <div class="flex justify-between border-b border-gray-800 pb-1"><span>MAC Address</span><span class="text-green-400">Physical ID (00:1A:...)</span></div>
+                                    <div class="flex justify-between border-b border-gray-800 pb-1"><span>Port</span><span class="text-green-400">Service Door (80, 443, 22)</span></div>
+                                    <div class="flex justify-between border-b border-gray-800 pb-1"><span>TCP/IP</span><span class="text-green-400">Communication Protocol</span></div>
+                                </div>
+                            </div>
+                             <div class="glass-panel p-6 rounded-lg">
+                                <h3 class="text-white font-bold mb-4">Linux Commands</h3>
+                                <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                                    <div class="bg-gray-800 p-2 rounded text-green-400">ls -la <span class="text-gray-500 block">List files (all)</span></div>
+                                    <div class="bg-gray-800 p-2 rounded text-green-400">pwd <span class="text-gray-500 block">Print Work Dir</span></div>
+                                    <div class="bg-gray-800 p-2 rounded text-green-400">chmod +x <span class="text-gray-500 block">Make executable</span></div>
+                                    <div class="bg-gray-800 p-2 rounded text-green-400">grep "x" <span class="text-gray-500 block">Search text</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- INTERACTIVE TERMINAL SIMULATOR -->
+                        <div class="terminal-window rounded-lg shadow-2xl overflow-hidden">
+                            <div class="terminal-header">
+                                <span class="text-xs text-gray-500">Interactive Terminal (Simulated)</span>
+                            </div>
+                            <div class="bg-black p-4 h-48 font-mono text-sm overflow-y-auto" onclick="document.getElementById('term-input').focus()">
+                                <div id="term-output" class="text-gray-300 mb-2">Welcome to Kali GNU/Linux Rolling<br>Last login: Tue Nov 23 10:44:22 2025 from 10.0.2.2</div>
+                                <div class="flex">
+                                    <span class="text-green-500 mr-2">root@kali:~$</span>
+                                    <input type="text" id="term-input" class="bg-transparent border-none outline-none text-white flex-1" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'phase2',
+                phase: 'PHASE 2',
+                title: 'Reconnaissance',
+                icon: 'search',
+                render: () => `
+                    <div class="fade-in max-w-5xl">
+                         <div class="flex items-center gap-4 mb-8">
+                             <div class="p-3 bg-purple-500/10 rounded border border-purple-500/30 text-purple-400"><i data-lucide="eye" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">Recon & OSINT</h1>
+                                <p class="text-gray-400 text-sm">Open Source Intelligence</p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="glass-panel p-6 rounded-lg">
+                                <h3 class="font-bold text-white mb-2">Google Dorking</h3>
+                                <p class="text-sm text-gray-400 mb-4">Using advanced search operators to find hidden data.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <button onclick="fillDork('site:gov filetype:pdf confidential')" class="px-2 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-green-400 border border-green-500/20 rounded transition">Gov PDFs</button>
+                                    <button onclick="fillDork('inurl:admin intitle:login')" class="px-2 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-green-400 border border-green-500/20 rounded transition">Admin Panels</button>
+                                    <button onclick="fillDork('index of /backup')" class="px-2 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-green-400 border border-green-500/20 rounded transition">Backups</button>
+                                </div>
+                                <div class="relative">
+                                    <input id="dork-input" type="text" class="w-full bg-black border border-gray-700 rounded p-2 text-sm text-white font-mono focus:border-green-500 outline-none transition" placeholder="Enter dork...">
+                                    <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-gray-500"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-panel p-6 rounded-lg">
+                                <h3 class="font-bold text-white mb-2">Tools of the Trade</h3>
+                                <ul class="space-y-3 mt-4">
+                                    <li class="flex items-center justify-between p-2 bg-white/5 rounded">
+                                        <span class="text-white text-sm font-bold">TheHarvester</span>
+                                        <span class="text-xs text-gray-500">Email/Subdomain gathering</span>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2 bg-white/5 rounded">
+                                        <span class="text-white text-sm font-bold">Maltego</span>
+                                        <span class="text-xs text-gray-500">Visual link analysis</span>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2 bg-white/5 rounded">
+                                        <span class="text-white text-sm font-bold">Shodan</span>
+                                        <span class="text-xs text-gray-500">Search engine for IoT</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'phase3',
+                phase: 'PHASE 3',
+                title: 'Scanning',
+                icon: 'radar',
+                render: () => `
+                    <div class="fade-in max-w-5xl">
+                         <div class="flex items-center gap-4 mb-8">
+                             <div class="p-3 bg-red-500/10 rounded border border-red-500/30 text-red-400"><i data-lucide="target" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">Active Scanning</h1>
+                                <p class="text-gray-400 text-sm">Identifying Vectors</p>
+                            </div>
+                        </div>
+                        
+                        <div class="terminal-window rounded-lg overflow-hidden shadow-2xl mb-8">
+                            <div class="terminal-header text-gray-500 text-xs">nmap_scanner_v7.94</div>
+                            <div class="p-4 bg-black/95 min-h-[300px] text-sm font-mono text-gray-300">
+                                <div class="mb-4 flex flex-wrap items-center gap-2">
+                                    <span class="text-green-500 font-bold">root@kali:~#</span>
+                                    <span class="text-white">nmap</span>
+                                    <select id="nmap-flag" class="bg-gray-800 text-blue-400 px-2 py-0.5 rounded outline-none border border-gray-700 text-xs cursor-pointer hover:border-green-500">
+                                        <option value="-sS">-sS (Stealth)</option>
+                                        <option value="-sV">-sV (Versions)</option>
+                                        <option value="-A">-A (Aggressive)</option>
+                                    </select>
+                                    <span class="text-white">10.10.11.5</span>
+                                    <button onclick="runNmap()" class="ml-2 bg-green-600 hover:bg-green-500 text-black font-bold px-3 py-0.5 rounded text-xs transition">SCAN</button>
+                                </div>
+                                <div id="nmap-output" class="pl-2 border-l-2 border-gray-800 min-h-[200px] text-xs text-gray-400 whitespace-pre-wrap">Waiting for command execution...</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'phase4',
+                phase: 'PHASE 4',
+                title: 'Web Hacking',
+                icon: 'globe',
+                render: () => `
+                    <div class="fade-in max-w-5xl">
+                         <div class="flex items-center gap-4 mb-8">
+                             <div class="p-3 bg-orange-500/10 rounded border border-orange-500/30 text-orange-400"><i data-lucide="globe" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">Web Exploitation</h1>
+                                <p class="text-gray-400 text-sm">OWASP Top 10</p>
+                            </div>
+                        </div>
+
+                        <div class="grid lg:grid-cols-2 gap-8">
+                            <!-- SQL Injection -->
+                            <div class="glass-panel p-6 rounded-lg">
+                                <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                                    <i data-lucide="database" class="w-4 h-4 text-red-500"></i> SQL Injection
+                                </h3>
+                                <p class="text-xs text-gray-400 mb-4">
+                                    Bypass authentication by injecting SQL commands. Try: <code class="text-green-400">' OR 1=1 --</code>
+                                </p>
+                                <div class="bg-black/50 p-4 rounded border border-gray-700">
+                                    <div class="mb-2 text-center text-gray-500 text-xs">ADMIN LOGIN PORTAL</div>
+                                    <input type="text" id="sqli-user" placeholder="Username" class="w-full bg-gray-900 border border-gray-800 rounded p-2 mb-2 text-white text-sm outline-none focus:border-red-500">
+                                    <input type="password" placeholder="Password" class="w-full bg-gray-900 border border-gray-800 rounded p-2 mb-4 text-white text-sm">
+                                    <button onclick="runSQL()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-1.5 rounded text-sm transition">LOGIN</button>
+                                    <div id="sqli-result" class="mt-2 text-center text-xs h-4"></div>
+                                </div>
+                            </div>
+
+                            <!-- XSS -->
+                            <div class="glass-panel p-6 rounded-lg">
+                                <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                                    <i data-lucide="code" class="w-4 h-4 text-yellow-500"></i> XSS (Cross Site Scripting)
+                                </h3>
+                                <p class="text-xs text-gray-400 mb-4">
+                                    Injecting malicious scripts into web pages viewed by other users.
+                                </p>
+                                <div class="space-y-2">
+                                    <div class="p-3 bg-gray-800/50 rounded border-l-2 border-yellow-500">
+                                        <div class="text-xs text-gray-500 mb-1">Reflected XSS</div>
+                                        <code class="text-yellow-400 text-xs">&lt;script&gt;alert(1)&lt;/script&gt;</code>
+                                    </div>
+                                    <div class="p-3 bg-gray-800/50 rounded border-l-2 border-orange-500">
+                                        <div class="text-xs text-gray-500 mb-1">Stored XSS</div>
+                                        <code class="text-orange-400 text-xs">&lt;img src=x onerror=alert(1)&gt;</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'phase5',
+                phase: 'PHASE 5',
+                title: 'Cryptography',
+                icon: 'key',
+                render: () => `
+                    <div class="fade-in max-w-5xl">
+                         <div class="flex items-center gap-4 mb-8">
+                             <div class="p-3 bg-indigo-500/10 rounded border border-indigo-500/30 text-indigo-400"><i data-lucide="lock" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">Cryptography</h1>
+                                <p class="text-gray-400 text-sm">Breaking Codes & Hashes</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-8 rounded-lg max-w-2xl mx-auto">
+                            <h3 class="text-white font-bold mb-6 text-center">HASH CRACKER SIMULATOR</h3>
+                            <div class="mb-4">
+                                <label class="text-xs text-gray-500 block mb-1">INPUT HASH (MD5/SHA1)</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="hash-input" value="5f4dcc3b5aa765d61d8327deb882cf99" class="flex-1 bg-black border border-gray-700 rounded p-2 text-green-500 font-mono text-sm outline-none focus:border-indigo-500">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <button onclick="analyzeHash()" class="bg-gray-800 hover:bg-gray-700 text-white py-2 rounded text-sm transition">Analyze Type</button>
+                                <button onclick="crackHash()" class="bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded text-sm transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Crack Hash</button>
+                            </div>
+                            <div id="hash-output" class="h-24 bg-black rounded border border-gray-800 p-4 text-xs font-mono text-gray-400 flex flex-col justify-center items-center">
+                                Awaiting input...
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'ai_ops',
+                phase: 'PHASE 6',
+                title: 'AI Operations',
+                icon: 'bot',
+                render: () => `
+                    <div class="fade-in max-w-6xl mx-auto">
+                        <div class="flex items-center gap-4 mb-8">
+                             <div class="p-3 bg-purple-500/10 rounded border border-purple-500/30 text-purple-400"><i data-lucide="bot" class="w-8 h-8"></i></div>
+                            <div>
+                                <h1 class="text-3xl font-bold text-white">AI Operations Center</h1>
+                                <p class="text-gray-400 text-sm">Leverage Gemini LLM for Security Analysis</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[600px]">
+                            <!-- TOOL 1: CYBER ORACLE (CHAT) -->
+                            <div class="terminal-window rounded-lg flex flex-col h-full shadow-2xl border-purple-500/30">
+                                <div class="terminal-header bg-purple-900/20 border-b border-purple-500/20">
+                                    <div class="dot bg-red-500"></div><div class="dot bg-yellow-500"></div><div class="dot bg-green-500"></div>
+                                    <span class="ml-2 text-xs text-purple-300 font-mono">./cyber_oracle.sh --interactive</span>
+                                </div>
+                                <div id="oracle-log" class="flex-1 bg-black/95 p-4 overflow-y-auto font-mono text-sm space-y-4">
+                                    <div class="text-purple-400">System: Neural Link Established. I am your Cyber Security Assistant. Ask me anything about hacking tools, Linux commands, or defense strategies.</div>
+                                </div>
+                                <div class="p-3 bg-gray-900 border-t border-gray-800 flex gap-2">
+                                    <span class="text-purple-500 font-bold self-center">></span>
+                                    <input type="text" id="oracle-input" class="bg-transparent flex-1 text-white outline-none font-mono text-sm" placeholder="Ask about Nmap flags, SQLi, etc..." onkeypress="if(event.key==='Enter') askOracle()">
+                                    <button onclick="askOracle()" class="text-purple-400 hover:text-white"><i data-lucide="send" class="w-4 h-4"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- TOOL 2: CODE AUDITOR -->
+                            <div class="glass-panel p-6 rounded-lg flex flex-col h-full">
+                                <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                                    <i data-lucide="file-code" class="w-5 h-5 text-blue-400"></i> Source Code Auditor
+                                </h3>
+                                <p class="text-xs text-gray-400 mb-2">Paste code snippets to scan for vulnerabilities using AI analysis.</p>
+                                
+                                <textarea id="audit-code" class="flex-1 bg-black border border-gray-700 rounded p-3 text-gray-300 font-mono text-xs outline-none focus:border-blue-500 resize-none mb-4" placeholder="// Paste potentially vulnerable code here (e.g., PHP, Python, JS)..."></textarea>
+                                
+                                <button onclick="auditCode()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded text-sm transition shadow-[0_0_15px_rgba(37,99,235,0.4)] flex justify-center gap-2">
+                                    ✨ Analyze Vulnerabilities
+                                </button>
+                                
+                                <div id="audit-result" class="mt-4 h-48 bg-black/50 border border-gray-800 rounded p-3 overflow-y-auto hidden">
+                                    <div class="markdown-body text-xs text-gray-300"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // --- 2. ENGINE LOGIC ---
+        let activeModule = 'dashboard';
+
+        function init() {
+            startIntro();
+            renderNav();
+            startMatrix();
+            setupTerminal();
+        }
+
+        function startIntro() {
+            const bar = document.getElementById('intro-bar');
+            const layer = document.getElementById('intro-layer');
+            const app = document.getElementById('app');
+            const text = document.getElementById('intro-text');
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 5;
+                if(width > 100) width = 100;
+                bar.style.width = width + '%';
+                
+                if(width === 100) {
+                    clearInterval(interval);
+                    text.innerText = "ACCESS GRANTED";
+                    text.classList.add('text-green-500');
+                    text.classList.add('animate-pulse');
+                    
+                    setTimeout(() => {
+                        layer.style.opacity = '0';
+                        setTimeout(() => {
+                            layer.style.display = 'none';
+                            app.classList.remove('hidden');
+                            setTimeout(() => app.classList.remove('opacity-0'), 50);
+                            loadModule('dashboard'); // Load dashboard after transition
+                        }, 500);
+                    }, 800);
+                }
+            }, 50);
+        }
+
+        function renderNav() {
+            const nav = document.getElementById('nav-container');
+            nav.innerHTML = curriculum.map(mod => `
+                <button onclick="loadModule('${mod.id}')" 
+                    class="nav-btn w-full flex items-center gap-4 px-4 py-3 group text-left mb-1 rounded ${mod.id === activeModule ? 'active' : 'text-gray-500'}">
+                    <i data-lucide="${mod.icon}" class="w-5 h-5"></i>
+                    <div>
+                        <div class="text-sm font-bold font-mono tracking-wide ${mod.id === activeModule ? 'text-white' : 'text-gray-400'}">${mod.title.toUpperCase()}</div>
+                        <div class="text-[10px] opacity-60 font-mono">${mod.phase}</div>
+                    </div>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function loadModule(id) {
+            activeModule = id;
+            const module = curriculum.find(m => m.id === id);
+            
+            document.getElementById('header-phase').innerText = module.phase;
+            document.getElementById('header-title').innerText = module.title.toUpperCase();
+            document.getElementById('content-area').innerHTML = module.render();
+            
+            renderNav();
+            lucide.createIcons();
+
+            // Re-attach event listeners for specific modules if needed
+            if(id === 'phase1') setupTerminal();
+        }
+
+        // --- 3. SIMULATORS ---
+
+        // Linux Terminal Logic
+        function setupTerminal() {
+            const input = document.getElementById('term-input');
+            if(!input) return;
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const cmd = this.value.trim().toLowerCase();
+                    const output = document.getElementById('term-output');
+                    
+                    output.innerHTML += `<div class="mt-1"><span class="text-green-500">root@kali:~$</span> ${this.value}</div>`;
+                    
+                    let response = "";
+                    if (cmd === 'help') response = "Available commands: ls, pwd, whoami, clear";
+                    else if (cmd === 'ls') response = "Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos";
+                    else if (cmd === 'pwd') response = "/root";
+                    else if (cmd === 'whoami') response = "root";
+                    else if (cmd === 'clear') { output.innerHTML = ""; response = ""; }
+                    else if (cmd !== "") response = `bash: ${cmd}: command not found`;
+
+                    if(response) output.innerHTML += `<div class="text-gray-400">${response}</div>`;
+                    
+                    this.value = '';
+                    output.scrollTop = output.scrollHeight;
+                }
+            });
+        }
+
+        // Nmap Logic
+        function runNmap() {
+            const output = document.getElementById('nmap-output');
+            const flag = document.getElementById('nmap-flag').value;
+            
+            output.innerHTML = `<span class="text-green-500">Starting Nmap 7.94...</span><br>`;
+            
+            let steps = [
+                "Initiating Ping Scan...",
+                "Scanning 10.10.11.5 [1000 ports]...",
+                "Completed Scan at " + new Date().toLocaleTimeString()
+            ];
+
+            let i = 0;
+            function print() {
+                if(i < steps.length) {
+                    output.innerHTML += steps[i] + "<br>";
+                    i++;
+                    setTimeout(print, 600);
+                } else {
+                    let res = `<br><span class="text-blue-400">PORT     STATE SERVICE</span><br>`;
+                    res += `22/tcp   open  ssh<br>`;
+                    res += `80/tcp   open  http<br>`;
+                    if(flag === '-sV' || flag === '-A') {
+                        res += `|_ http-server-header: Apache/2.4.41 (Ubuntu)<br>`;
+                        res += `|_ http-title: Admin Login<br>`;
+                    }
+                    output.innerHTML += res;
+                }
+            }
+            print();
+        }
+
+        // SQL Injection Logic
+        function runSQL() {
+            const user = document.getElementById('sqli-user').value;
+            const res = document.getElementById('sqli-result');
+            
+            if(user.includes("' OR 1=1")) {
+                res.innerHTML = `<span class="text-green-500 font-bold">SUCCESS: Logged in as ADMIN</span>`;
+            } else {
+                res.innerHTML = `<span class="text-red-500 font-bold">FAILED: Invalid Credentials</span>`;
+            }
+        }
+
+        // Hash Logic
+        function analyzeHash() {
+            const val = document.getElementById('hash-input').value;
+            const out = document.getElementById('hash-output');
+            if(val.length === 32) out.innerHTML = `<span class="text-blue-400">Algorithm: MD5</span><br>Length: 32 chars`;
+            else if(val.length === 40) out.innerHTML = `<span class="text-blue-400">Algorithm: SHA-1</span><br>Length: 40 chars`;
+            else out.innerHTML = `<span class="text-red-400">Unknown Format</span>`;
+        }
+
+        function crackHash() {
+            const out = document.getElementById('hash-output');
+            out.innerHTML = `<span class="text-yellow-500 animate-pulse">Cracking...</span>`;
+            setTimeout(() => {
+                out.innerHTML = `<span class="text-green-500 font-bold">PLAINTEXT FOUND: "password"</span>`;
+            }, 1500);
+        }
+
+        // Dork Logic
+        function fillDork(text) {
+            document.getElementById('dork-input').value = text;
+        }
+        
+        // --- AI FEATURES LOGIC ---
+        
+        async function askOracle() {
+            const input = document.getElementById('oracle-input');
+            const log = document.getElementById('oracle-log');
+            const question = input.value.trim();
+            
+            if (!question) return;
+            
+            // Append User Question
+            log.innerHTML += `<div class="text-gray-300 mt-2"><span class="text-green-500">User:</span> ${question}</div>`;
+            input.value = '';
+            log.scrollTop = log.scrollHeight;
+            
+            // Show Loading
+            const loadingId = 'loading-' + Date.now();
+            log.innerHTML += `<div id="${loadingId}" class="text-purple-400 mt-2 animate-pulse">Analyzing...</div>`;
+            log.scrollTop = log.scrollHeight;
+            
+            // Call Gemini
+            const response = await callGemini(question, "You are a concise, technical cybersecurity expert providing assistance in a terminal environment. Keep answers short, technical, and safe.");
+            
+            // Remove Loading and Append Response
+            document.getElementById(loadingId).remove();
+            log.innerHTML += `<div class="text-purple-300 mt-2"><span class="text-purple-500">Oracle:</span> ${marked.parse(response)}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        async function auditCode() {
+            const code = document.getElementById('audit-code').value.trim();
+            const resultDiv = document.getElementById('audit-result');
+            const contentDiv = resultDiv.querySelector('.markdown-body');
+            
+            if (!code) return;
+            
+            resultDiv.classList.remove('hidden');
+            contentDiv.innerHTML = '<span class="text-blue-400 animate-pulse">Scanning code for vulnerabilities...</span>';
+            
+            const prompt = `Analyze this code for security vulnerabilities. Explain the issues briefly and suggest a fix:\n\n${code}`;
+            const response = await callGemini(prompt, "You are a senior code auditor. Identify vulnerabilities (like SQLi, XSS, Buffer Overflows) in code snippets. Be concise and provide secure alternatives.");
+            
+            contentDiv.innerHTML = marked.parse(response);
+        }
+
+        // --- 4. VISUALS ---
+        function startMatrix() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = "01XYZA";
+            const fontSz = 14;
+            const cols = canvas.width / fontSz;
+            const drops = Array(Math.floor(cols)).fill(1);
+
+            function draw() {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#0F0";
+                ctx.font = fontSz + "px monospace";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSz, drops[i] * fontSz);
+                    if (drops[i] * fontSz > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+            setInterval(draw, 50);
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // Boot
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>
