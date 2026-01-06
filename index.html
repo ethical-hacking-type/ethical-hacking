@@ -3,145 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethical Hacking Academy</title>
+    <title>Ethical Hacking Academy | n4jwvn</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --neon-green: #22c55e;
+            --cyber-bg: #020617;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cyber-bg);
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
             background: #0f172a; 
         }
         ::-webkit-scrollbar-thumb {
             background: #334155; 
-            border-radius: 4px;
+            border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569; 
+            background: var(--neon-green); 
         }
 
-        /* Animations */
+        /* Glow Animations */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(34, 197, 94, 0.1);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+
+        /* Glitch effect for titles */
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
         }
-        
-        .selection-green::selection {
-            background-color: rgba(34, 197, 94, 0.3);
-            color: #bbf7d0;
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
     </style>
 </head>
-<body class="bg-black text-slate-300 font-sans h-screen flex overflow-hidden selection-green">
+<body class="text-slate-300 h-screen flex overflow-hidden selection:bg-green-500/30">
 
     <!-- Mobile Overlay -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/80 z-20 hidden backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/90 z-40 hidden backdrop-blur-md" onclick="toggleMobileMenu()"></div>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-30 w-72 bg-slate-950 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col h-full">
-        <div class="p-6 border-b border-slate-800">
-            <div class="flex items-center gap-2 text-green-500 mb-1">
-                <i data-lucide="terminal" class="w-6 h-6"></i>
-                <span class="font-bold tracking-tight text-lg text-white">Ethical<span class="text-green-500">Hacking</span>101</span>
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-50 w-72 bg-[#020617] border-r border-slate-800/60 transform -translate-x-full md:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col h-full shadow-2xl">
+        <div class="p-8 border-b border-slate-800/60">
+            <div class="flex items-center gap-3 text-green-500 mb-2">
+                <div class="p-2 bg-green-500/10 rounded-lg">
+                    <i data-lucide="terminal" class="w-6 h-6"></i>
+                </div>
+                <span class="font-bold tracking-tighter text-xl text-white">N4JWVN<span class="text-green-500">.EDU</span></span>
             </div>
-            <p class="text-xs text-slate-500 font-mono pl-8">v1.0.4 // Educational Use</p>
+            <p class="text-[10px] text-slate-500 font-mono pl-1 tracking-widest uppercase">System Auth: Verified</p>
         </div>
 
-        <div id="sidebar-nav" class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        <div id="sidebar-nav" class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
             <!-- Sidebar items injected by JS -->
         </div>
 
-        <div class="p-4 border-t border-slate-800">
-            <div class="bg-slate-900 rounded p-3 flex items-start gap-3">
-                <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-500 shrink-0"></i>
-                <p class="text-[10px] text-slate-400 leading-tight">
-                    Disclaimer: The developer is not responsible for misuse of this information. Stay legal.
+        <div class="p-6 border-t border-slate-800/60 space-y-4">
+            <!-- Instagram Link -->
+            <a href="https://www.instagram.com/n4jwvn/" target="_blank" class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 hover:border-pink-500/50 transition-all group">
+                <div class="p-2 bg-pink-500/20 rounded-lg text-pink-500 group-hover:scale-110 transition-transform">
+                    <i data-lucide="instagram" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-white leading-none">@n4jwvn</p>
+                    <p class="text-[10px] text-slate-500 mt-1">Follow for Updates</p>
+                </div>
+            </a>
+
+            <div class="bg-slate-950/50 rounded-xl p-4 border border-slate-800/60">
+                <div class="flex items-center gap-2 mb-2 text-yellow-500">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-widest">Protocol</span>
+                </div>
+                <p class="text-[10px] text-slate-500 leading-relaxed italic">
+                    Strictly for educational research. Misuse of tools is prohibited under cyber-law.
                 </p>
             </div>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full min-w-0 relative">
-        <!-- Mobile Header -->
-        <div class="md:hidden flex items-center justify-between p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur z-10 sticky top-0">
-            <span class="font-bold text-white">Module View</span>
-            <button onclick="toggleMobileMenu()" class="p-2 text-slate-400 hover:text-white">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-        </div>
-
-        <!-- Scrollable Content Area -->
-        <div id="main-scroll" class="flex-1 overflow-y-auto bg-slate-950/50 p-4 md:p-8 lg:p-12 scroll-smooth">
-            <div class="max-w-4xl mx-auto">
-                <!-- Breadcrumbs -->
-                <div class="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
-                    <span>root</span>
-                    <span>/</span>
-                    <span>academy</span>
-                    <span>/</span>
-                    <span id="breadcrumb-id" class="text-green-500">intro</span>
+    <main class="flex-1 flex flex-col h-full min-w-0 relative bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+        <div class="scanline"></div>
+        
+        <!-- Top Nav -->
+        <header class="flex items-center justify-between px-6 py-4 border-b border-slate-800/40 bg-slate-950/40 backdrop-blur-xl z-30">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white bg-slate-900 rounded-lg">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden md:flex items-center gap-2 text-xs font-mono">
+                    <span class="text-slate-600">PATH:</span>
+                    <span class="text-slate-400">~/academy/</span>
+                    <span id="breadcrumb-id" class="text-green-500 font-bold">home</span>
                 </div>
-
-                <!-- Dynamic Content Injection Point -->
-                <div id="content-area" class="fade-in"></div>
-
-                <!-- Footer -->
-                <footer class="mt-20 pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
-                    <p>&copy; 2023 Ethical Hacking Academy. Build Secure Systems.</p>
-                    <div class="flex justify-center gap-4 mt-2">
-                        <span class="cursor-pointer hover:text-slate-400">Privacy</span>
-                        <span class="cursor-pointer hover:text-slate-400">Terms</span>
-                        <span class="cursor-pointer hover:text-slate-400">Resources</span>
-                    </div>
-                </footer>
             </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">Server: Online</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div id="main-scroll" class="flex-1 overflow-y-auto p-6 md:p-12 lg:p-16 scroll-smooth">
+            <div id="content-wrapper" class="max-w-5xl mx-auto">
+                <!-- Content will be injected here -->
+            </div>
+            
+            <footer class="mt-24 pt-12 border-t border-slate-800/60 text-center space-y-4">
+                <div class="flex justify-center gap-8 opacity-40">
+                    <i data-lucide="github" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+                    <i data-lucide="twitter" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+                    <i data-lucide="command" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+                </div>
+                <p class="text-[10px] font-mono tracking-widest text-slate-600">
+                    &copy; MMXXIV N4JWVN ACADEMY // ENCRYPTED SESSION
+                </p>
+            </footer>
         </div>
     </main>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- DATA ---
         const curriculum = [
             {
+                id: 'home',
+                title: 'System Access',
+                icon: 'home',
+                color: 'text-white',
+                isHome: true,
+                content: {
+                    heading: "Welcome to N4JWVN Academy",
+                    description: "Select a module from the terminal sidebar to begin your journey into the art of offensive security.",
+                    sections: []
+                }
+            },
+            {
                 id: 'intro',
-                title: 'Introduction & Ethics',
-                icon: 'shield',
+                title: 'Ethics & Laws',
+                icon: 'shield-check',
                 color: 'text-blue-400',
                 content: {
-                    heading: "Foundations of Ethical Hacking",
-                    description: "Ethical hacking involves an authorized attempt to gain unauthorized access to a computer system, application, or data. Carrying out an ethical hack involves duplicating strategies and actions of malicious attackers.",
+                    heading: "The Ethical Matrix",
+                    description: "Before you learn to break systems, you must learn the code of conduct that keeps you out of prison.",
                     sections: [
                         {
-                            title: "The CIA Triad",
-                            text: "The core of information security. All security controls act to protect one or more of these principles.",
+                            title: "The Ethical Hacker's Creed",
+                            text: "Ethical hacking is the practice of testing systems with full authorization. Without a contract, it's a crime.",
                             points: [
-                                { label: "Confidentiality", desc: "Protecting data from unauthorized access." },
-                                { label: "Integrity", desc: "Ensuring data is not altered or tampered with." },
-                                { label: "Availability", desc: "Ensuring systems are up and running for authorized users." }
+                                { label: "Permission", desc: "Never touch a system without written consent." },
+                                { label: "Privacy", desc: "Respect the data you encounter during a pentest." },
+                                { label: "Reporting", desc: "Document every flaw and provide remediation steps." }
                             ]
-                        },
-                        {
-                            title: "Types of Hackers",
-                            text: "Understanding the ecosystem.",
-                            points: [
-                                { label: "White Hat", desc: "Ethical hackers. Authorized. Improving security." },
-                                { label: "Black Hat", desc: "Malicious hackers. Unauthorized. Personal gain or damage." },
-                                { label: "Grey Hat", desc: "Somewhere in between. Often illegal but not necessarily malicious." }
-                            ]
-                        },
-                        {
-                            title: "Legal & Compliance",
-                            text: "CRITICAL: You must always have written permission before scanning or testing any system. Unauthorized scanning is illegal in most jurisdictions (CFAA in USA, Computer Misuse Act in UK).",
-                            isWarning: true
                         }
                     ]
                 }
@@ -149,26 +211,19 @@
             {
                 id: 'recon',
                 title: 'Reconnaissance',
-                icon: 'search',
-                color: 'text-green-400',
+                icon: 'eye',
+                color: 'text-emerald-400',
                 content: {
-                    heading: "Phase 1: Reconnaissance",
-                    description: "Also known as footprinting, this is the preparatory phase where an attacker gathers as much information as possible about the target network prior to launching an attack.",
+                    heading: "Information Gathering",
+                    description: "80% of a successful hack is done before the first exploit is even considered.",
                     sections: [
                         {
-                            title: "Passive vs Active",
-                            text: "The difference lies in detection risk.",
-                            points: [
-                                { label: "Passive Recon", desc: "Gathering info without interacting directly with the target (e.g., Social Media, Whois, Job postings)." },
-                                { label: "Active Recon", desc: "Direct interaction (e.g., Pinging, Nmap scans). Higher risk of detection." }
-                            ]
+                            title: "OSINT (Open Source Intelligence)",
+                            text: "Finding what the target doesn't know they've exposed.",
+                            tools: ["Shodan", "Whois", "Google Dorks", "TheHarvester"]
                         },
                         {
-                            title: "OSINT Tools",
-                            tools: ["Maltego", "TheHarvester", "Shodan", "Google Dorks"]
-                        },
-                        {
-                            title: "Interactive Tool: Google Dorking",
+                            title: "Interactive: Google Dorking",
                             type: "dork_sim"
                         }
                     ]
@@ -176,390 +231,305 @@
             },
             {
                 id: 'scanning',
-                title: 'Scanning & Enumeration',
+                title: 'Network Scanning',
                 icon: 'activity',
                 color: 'text-purple-400',
                 content: {
-                    heading: "Phase 2: Scanning",
-                    description: "Scanning involves taking the information discovered during reconnaissance and using it to examine the network. Hackers are seeking any information that can help them perpetrate an attack, such as computer names, IP addresses, and user accounts.",
+                    heading: "Scanning & Enumeration",
+                    description: "Mapping the network to find live hosts and open services.",
                     sections: [
                         {
-                            title: "Scanning Types",
-                            text: "Identifying open doors (ports) on a server.",
-                            tools: ["Nmap (Network Mapper)", "Masscan", "RustScan", "Nessus"]
-                        },
-                        {
-                            title: "Simulation: Nmap Command Generator",
+                            title: "Port Discovery",
+                            text: "Identifying entry points using Nmap.",
                             type: "nmap_sim"
                         }
                     ]
                 }
             },
             {
-                id: 'network',
-                title: 'Network Sniffing',
-                icon: 'wifi',
-                color: 'text-yellow-400',
-                content: {
-                    heading: "Network Sniffing & MITM",
-                    description: "Sniffing is the process of monitoring and capturing all the packets passing through a given network using a packet sniffer.",
-                    sections: [
-                        {
-                            title: "Key Concepts",
-                            points: [
-                                { label: "Promiscuous Mode", desc: "NIC mode that passes all traffic to the CPU." },
-                                { label: "ARP Spoofing", desc: "Linking attacker's MAC with legitimate IP." }
-                            ]
-                        },
-                        {
-                            title: "Tools of the Trade",
-                            tools: ["Wireshark", "Tcpdump", "Bettercap", "Ettercap"]
-                        }
-                    ]
-                }
-            },
-            {
                 id: 'web',
-                title: 'Web App Hacking',
+                title: 'Web Exploitation',
                 icon: 'globe',
                 color: 'text-pink-400',
                 content: {
-                    heading: "Web Application Penetration Testing",
-                    description: "Focuses on vulnerabilities within web applications, often leveraging the OWASP Top 10.",
+                    heading: "Web App Hacking",
+                    description: "Attacking the application layer where most vulnerabilities reside today.",
                     sections: [
                         {
-                            title: "OWASP Top 10 (Critical)",
+                            title: "OWASP Top 10",
                             points: [
-                                { label: "Injection (SQLi)", desc: "Untrusted data sent to interpreter." },
-                                { label: "Broken Access Control", desc: "Users acting outside permissions." },
-                                { label: "XSS", desc: "Injecting malicious scripts into websites." }
+                                { label: "Broken Access Control", desc: "Accessing files you shouldn't." },
+                                { label: "Cryptographic Failures", desc: "Weak SSL or unhashed passwords." },
+                                { label: "Injection", desc: "SQLi or Command Injection attacks." }
                             ]
-                        },
-                        {
-                            title: "Tools",
-                            tools: ["Burp Suite", "OWASP ZAP", "SQLMap"]
                         }
                     ]
                 }
             },
             {
                 id: 'passwords',
-                title: 'Cryptography',
-                icon: 'hash',
+                title: 'Password Cracking',
+                icon: 'key',
                 color: 'text-red-400',
                 content: {
-                    heading: "Cracking & Encryption",
-                    description: "Understanding how data is scrambled and how attackers reverse that process.",
+                    heading: "Cracking & Auth",
+                    description: "Learning how hashes are cracked and how to defend against brute-force.",
                     sections: [
                         {
-                            title: "Attack Types",
-                            points: [
-                                { label: "Brute Force", desc: "Trying every possible combination." },
-                                { label: "Dictionary Attack", desc: "Using a list of common words." },
-                                { label: "Rainbow Tables", desc: "Precomputed hash tables." }
-                            ]
-                        },
-                        {
-                            title: "Interactive: Password Strength",
+                            title: "Entropy Check",
                             type: "password_sim"
-                        }
-                    ]
-                }
-            },
-            {
-                id: 'malware',
-                title: 'Malware Threats',
-                icon: 'alert-triangle',
-                color: 'text-orange-400',
-                content: {
-                    heading: "Malicious Software",
-                    description: "Software intentionally designed to cause damage to a computer, server, client, or computer network.",
-                    sections: [
-                        {
-                            title: "Types",
-                            points: [
-                                { label: "Virus", desc: "Attaches to host and replicates." },
-                                { label: "Worm", desc: "Self-replicating network spreader." },
-                                { label: "Ransomware", desc: "Encrypts data and demands payment." }
-                            ]
                         }
                     ]
                 }
             }
         ];
 
-        // --- STATE ---
-        let activeModuleId = 'intro';
+        let activeModuleId = 'home';
         let isMobileMenuOpen = false;
-
-        // --- RENDER FUNCTIONS ---
 
         function renderSidebar() {
             const container = document.getElementById('sidebar-nav');
             container.innerHTML = curriculum.map(mod => {
                 const isActive = mod.id === activeModuleId;
                 const activeClasses = isActive 
-                    ? 'bg-slate-800 border-l-4 border-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.15)]' 
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white';
-                const iconColor = isActive ? mod.color : 'text-slate-500 group-hover:text-slate-300';
+                    ? 'bg-green-500/10 border-l-2 border-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.1)]' 
+                    : 'text-slate-500 hover:bg-slate-900 hover:text-slate-200';
                 
                 return `
                     <button onclick="setActiveModule('${mod.id}')" 
-                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${activeClasses}">
-                        <div class="transition-colors ${iconColor}">
+                        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${activeClasses}">
+                        <div class="transition-colors ${isActive ? mod.color : 'text-slate-600 group-hover:text-slate-400'}">
                             <i data-lucide="${mod.icon}" class="w-5 h-5"></i>
                         </div>
-                        <span class="font-medium text-sm text-left">${mod.title}</span>
-                        ${isActive ? '<i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-green-500"></i>' : ''}
+                        <span class="font-bold text-xs uppercase tracking-widest text-left">${mod.title}</span>
                     </button>
                 `;
             }).join('');
+            lucide.createIcons();
         }
 
-        function renderContent() {
-            const module = curriculum.find(m => m.id === activeModuleId);
-            const container = document.getElementById('content-area');
-            document.getElementById('breadcrumb-id').innerText = module.id;
-
-            let html = `
-                <div class="border-b border-slate-800 pb-6 mb-8">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span class="p-2 rounded-lg bg-slate-800 ${module.color}">
-                            <i data-lucide="${module.icon}" class="w-5 h-5"></i>
-                        </span>
-                        <span class="text-slate-400 uppercase tracking-wider text-xs font-bold">Module</span>
+        function renderHome() {
+            return `
+                <div class="fade-in text-center py-10 md:py-20">
+                    <div class="inline-block p-4 bg-green-500/10 rounded-3xl border border-green-500/20 mb-8">
+                        <i data-lucide="terminal" class="w-16 h-16 text-green-500 glow-text"></i>
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">${module.content.heading}</h1>
-                    <p class="text-slate-400 text-lg leading-relaxed">${module.content.description}</p>
+                    <h1 class="text-4xl md:text-7xl font-black text-white mb-6 tracking-tighter glitch-hover">
+                        N4JWVN <span class="text-green-500 underline decoration-green-500/30 underline-offset-8">ACADEMY</span>
+                    </h1>
+                    <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
+                        Advanced ethical hacking resources, network security simulations, and offensive research tools for the modern security professional.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        <div class="p-6 bg-slate-900/40 border border-slate-800/60 rounded-2xl hover:border-green-500/40 transition-all cursor-pointer group" onclick="setActiveModule('intro')">
+                            <i data-lucide="book" class="w-8 h-8 text-green-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                            <h3 class="text-white font-bold mb-2">Learn</h3>
+                            <p class="text-xs text-slate-500">Structured modules on modern cyber threats.</p>
+                        </div>
+                        <div class="p-6 bg-slate-900/40 border border-slate-800/60 rounded-2xl hover:border-blue-500/40 transition-all cursor-pointer group" onclick="setActiveModule('scanning')">
+                            <i data-lucide="cpu" class="w-8 h-8 text-blue-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                            <h3 class="text-white font-bold mb-2">Simulate</h3>
+                            <p class="text-xs text-slate-500">Interactive tools to practice command execution.</p>
+                        </div>
+                        <div class="p-6 bg-slate-900/40 border border-slate-800/60 rounded-2xl hover:border-purple-500/40 transition-all cursor-pointer group" onclick="setActiveModule('recon')">
+                            <i data-lucide="zap" class="w-8 h-8 text-purple-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                            <h3 class="text-white font-bold mb-2">Exploit</h3>
+                            <p class="text-xs text-slate-500">Understand the logic of common vulnerabilities.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="space-y-12">
+            `;
+        }
+
+        function renderModule(module) {
+            let html = `
+                <div class="fade-in space-y-12">
+                    <div class="border-b border-slate-800/60 pb-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="px-3 py-1 bg-green-500/10 text-green-500 text-[10px] font-mono rounded-full border border-green-500/20">MODULE_0${curriculum.indexOf(module)}</span>
+                        </div>
+                        <h1 class="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">${module.content.heading}</h1>
+                        <p class="text-slate-400 text-lg max-w-3xl">${module.content.description}</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-12">
             `;
 
             module.content.sections.forEach(section => {
                 html += `
-                    <div class="relative pl-6 border-l-2 border-slate-800 hover:border-slate-600 transition-colors">
-                        <h2 class="text-xl font-bold text-slate-200 mb-3">${section.title}</h2>
+                    <div class="bg-slate-900/20 rounded-3xl p-8 border border-slate-800/40 hover:border-slate-700/60 transition-colors">
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                            <span class="w-2 h-8 bg-green-500 rounded-full"></span>
+                            ${section.title}
+                        </h2>
                 `;
 
-                if (section.isWarning) {
-                    html += `
-                        <div class="bg-red-900/20 border border-red-500/50 rounded-md p-4 flex items-start gap-3 my-4">
-                            <i data-lucide="alert-triangle" class="w-6 h-6 text-red-500 shrink-0 mt-0.5"></i>
-                            <div class="text-red-200 text-sm leading-relaxed">${section.text}</div>
-                        </div>
-                    `;
-                } else if (section.text) {
-                    html += `<p class="text-slate-400 mb-4">${section.text}</p>`;
+                if (section.text) {
+                    html += `<p class="text-slate-400 mb-6 leading-relaxed">${section.text}</p>`;
                 }
 
                 if (section.points) {
-                    html += '<ul class="space-y-3 mb-4">';
+                    html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">';
                     section.points.forEach(pt => {
                         html += `
-                            <li class="flex gap-3 text-sm md:text-base">
-                                <div class="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></div>
-                                <div>
-                                    <span class="text-slate-200 font-medium">${pt.label}:</span>
-                                    <span class="text-slate-400 ml-1">${pt.desc}</span>
-                                </div>
-                            </li>
+                            <div class="p-4 bg-slate-950/50 rounded-xl border border-slate-800/40">
+                                <span class="block text-green-500 font-bold text-sm mb-1">${pt.label}</span>
+                                <span class="text-slate-400 text-xs">${pt.desc}</span>
+                            </div>
                         `;
                     });
-                    html += '</ul>';
+                    html += '</div>';
                 }
 
                 if (section.tools) {
                     html += `
-                        <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-800">
-                            <h4 class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-3">Recommended Tools</h4>
-                            <div class="flex flex-wrap gap-2">
-                                ${section.tools.map(tool => `
-                                    <span class="px-3 py-1 bg-slate-800 text-green-400 font-mono text-sm rounded border border-slate-700">${tool}</span>
-                                `).join('')}
-                            </div>
+                        <div class="flex flex-wrap gap-3 mb-6">
+                            ${section.tools.map(tool => `<span class="px-4 py-2 bg-slate-950 text-slate-300 font-mono text-xs rounded-lg border border-slate-800">${tool}</span>`).join('')}
                         </div>
                     `;
                 }
 
-                // Simulators
                 if (section.type === 'nmap_sim') html += getNmapSimHTML();
                 if (section.type === 'dork_sim') html += getDorkSimHTML();
                 if (section.type === 'password_sim') html += getPasswordSimHTML();
 
-                html += `</div>`; // End Section
+                html += `</div>`;
             });
 
-            html += `
-                </div>
-                <div class="mt-12 p-6 bg-slate-900 rounded-lg border border-slate-800 text-center">
-                    <i data-lucide="book-open" class="w-8 h-8 text-slate-500 mx-auto mb-3"></i>
-                    <p class="text-slate-400 text-sm">End of Module. Practice these concepts in a controlled, legal lab environment only.</p>
-                </div>
-            `;
+            html += `</div></div>`;
+            return html;
+        }
 
-            container.innerHTML = html;
-            
-            // Re-initialize icons
+        function renderContent() {
+            const module = curriculum.find(m => m.id === activeModuleId);
+            const container = document.getElementById('content-wrapper');
+            document.getElementById('breadcrumb-id').innerText = module.id;
+
+            if (module.isHome) {
+                container.innerHTML = renderHome();
+            } else {
+                container.innerHTML = renderModule(module);
+            }
+
             lucide.createIcons();
-
-            // Attach Simulator Listeners
             attachNmapListeners();
             attachDorkListeners();
             attachPasswordListeners();
         }
 
-        // --- SIMULATOR HTML & LOGIC ---
-
+        // --- SIMULATOR COMPONENTS ---
         function getNmapSimHTML() {
             return `
-                <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 space-y-4 mt-4">
-                    <h3 class="text-white font-semibold flex items-center gap-2"><i data-lucide="terminal" class="w-4 h-4"></i> Command Builder</h3>
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <div class="flex-1">
-                            <label class="text-xs text-slate-400 block mb-1">Scan Type</label>
-                            <select id="nmap-flags" class="w-full bg-slate-800 text-white p-2 rounded border border-slate-600 focus:border-green-500 outline-none font-mono text-sm">
-                                <option value="-sS">-sS (Stealth SYN)</option>
-                                <option value="-sT">-sT (TCP Connect)</option>
-                                <option value="-sV">-sV (Version Det)</option>
-                                <option value="-A">-A (Aggressive)</option>
-                            </select>
-                        </div>
-                        <div class="flex-1">
-                            <label class="text-xs text-slate-400 block mb-1">Target IP</label>
-                            <input id="nmap-target" type="text" value="192.168.1.1" class="w-full bg-slate-800 text-white p-2 rounded border border-slate-600 focus:border-green-500 outline-none font-mono text-sm">
-                        </div>
-                        <div class="flex items-end">
-                            <button id="nmap-run-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-mono text-sm transition-colors disabled:opacity-50">Run Scan</button>
-                        </div>
+                <div class="space-y-4 font-mono">
+                    <div class="flex flex-wrap gap-4 p-4 bg-slate-950 rounded-2xl border border-slate-800">
+                        <select id="nmap-flags" class="bg-slate-900 text-green-500 p-2 rounded border border-slate-800 outline-none text-xs">
+                            <option value="-sS">Stealth (SYN)</option>
+                            <option value="-sV">Service Detection</option>
+                            <option value="-A">Aggressive Scan</option>
+                        </select>
+                        <input id="nmap-target" type="text" value="10.0.0.1" class="bg-slate-900 text-white p-2 rounded border border-slate-800 outline-none text-xs flex-1">
+                        <button id="nmap-run-btn" class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg text-xs font-bold transition-all">EXECUTE</button>
                     </div>
-                    <div class="bg-black p-3 rounded font-mono text-xs md:text-sm text-green-500 h-48 overflow-y-auto border border-slate-800" id="nmap-console">
-                        <div class="opacity-50 select-none mb-2">$ nmap -sS 192.168.1.1</div>
-                        <span class="animate-pulse">_</span>
+                    <div id="nmap-console" class="h-48 bg-black/80 rounded-2xl p-4 text-[11px] text-green-500/80 overflow-y-auto border border-green-500/10">
+                        <span class="opacity-40 tracking-widest">$ Waiting for input...</span>
                     </div>
                 </div>
             `;
-        }
-
-        function attachNmapListeners() {
-            const btn = document.getElementById('nmap-run-btn');
-            if(!btn) return;
-
-            btn.addEventListener('click', () => {
-                const flags = document.getElementById('nmap-flags').value;
-                const target = document.getElementById('nmap-target').value;
-                const consoleDiv = document.getElementById('nmap-console');
-                
-                btn.disabled = true;
-                btn.innerText = 'Scanning...';
-                consoleDiv.innerHTML = `<div class="opacity-50 select-none mb-2">$ nmap ${flags} ${target}</div><span class="animate-pulse">...</span>`;
-
-                setTimeout(() => {
-                    let result = `Starting Nmap 7.92 at 2023-10-14 10:00 EST<br>`;
-                    result += `Nmap scan report for ${target}<br>`;
-                    result += `Host is up (0.0023s latency).<br>`;
-                    result += `Not shown: 997 closed tcp ports (reset)<br>`;
-                    result += `PORT     STATE SERVICE<br>`;
-                    
-                    if (flags.includes('-sV')) {
-                        result += `22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu<br>`;
-                        result += `80/tcp   open  http    Apache httpd 2.4.41<br>`;
-                    } else {
-                        result += `22/tcp   open  ssh<br>`;
-                        result += `80/tcp   open  http<br>`;
-                    }
-                    
-                    result += `<br>Nmap done: 1 IP address (1 host up) scanned in 1.45 seconds`;
-                    consoleDiv.innerHTML = `<div class="opacity-50 select-none mb-2">$ nmap ${flags} ${target}</div>` + result;
-                    btn.disabled = false;
-                    btn.innerText = 'Run Scan';
-                }, 1500);
-            });
         }
 
         function getDorkSimHTML() {
             return `
-                <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 space-y-4 mt-4">
-                    <div class="flex gap-2 overflow-x-auto pb-2" id="dork-buttons">
-                        <button class="bg-slate-800 text-xs text-blue-300 px-3 py-1 rounded hover:bg-slate-700 whitespace-nowrap" data-val="site:target.com filetype:pdf">Public PDF Files</button>
-                        <button class="bg-slate-800 text-xs text-blue-300 px-3 py-1 rounded hover:bg-slate-700 whitespace-nowrap" data-val="site:target.com inurl:admin">Admin Panels</button>
-                        <button class="bg-slate-800 text-xs text-blue-300 px-3 py-1 rounded hover:bg-slate-700 whitespace-nowrap" data-val='intitle:"index of"'>Directory Listing</button>
+                <div class="space-y-4">
+                    <div class="flex gap-2 overflow-x-auto pb-2 scroll-hide">
+                        <button class="dork-btn px-3 py-1 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-400 hover:border-green-500" data-val="site:gov.it filetype:sql">SQL Leaks</button>
+                        <button class="dork-btn px-3 py-1 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-400 hover:border-green-500" data-val="inurl:admin login">Login Pages</button>
+                        <button class="dork-btn px-3 py-1 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-400 hover:border-green-500" data-val='intitle:"index of" "backup"'>Backup Dirs</button>
                     </div>
-                    <div class="relative">
-                        <input id="dork-input" type="text" value="site:example.com filetype:pdf" class="w-full pl-10 pr-4 py-3 bg-white text-slate-800 rounded-full border-2 border-transparent focus:border-blue-500 outline-none shadow-sm font-mono text-sm">
-                        <i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400 z-10"></i>
-                    </div>
-                    <div class="text-xs text-slate-400">* In a real scenario, this would be entered into Google search engine.</div>
+                    <input id="dork-input" type="text" class="w-full bg-slate-950 p-4 rounded-2xl border border-slate-800 outline-none font-mono text-sm text-green-500" value="site:target.com ext:pdf">
                 </div>
             `;
-        }
-
-        function attachDorkListeners() {
-            const container = document.getElementById('dork-buttons');
-            const input = document.getElementById('dork-input');
-            if (!container) return;
-
-            container.querySelectorAll('button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    input.value = e.target.getAttribute('data-val');
-                });
-            });
         }
 
         function getPasswordSimHTML() {
             return `
-                <div class="bg-slate-900 p-6 rounded-lg border border-slate-700 mt-4">
-                    <h3 class="text-white font-semibold mb-4">Password Entropy Checker</h3>
-                    <input id="pass-input" type="text" placeholder="Type a password..." class="w-full bg-slate-800 text-white p-3 rounded border border-slate-600 focus:border-purple-500 outline-none mb-4 font-mono">
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-xs text-slate-400">
-                            <span id="pass-strength-text">Strength: Too Short</span>
-                            <span id="pass-time-text">Time to Crack: Instantly</span>
-                        </div>
-                        <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div id="pass-bar" class="h-full transition-all duration-500 bg-red-500" style="width: 0%"></div>
-                        </div>
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                    <input id="pass-input" type="password" placeholder="Test password strength..." class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none mb-4 font-mono text-white">
+                    <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2">
+                        <span id="pass-strength-text" class="text-slate-500">Security: Void</span>
+                        <span id="pass-time-text" class="text-slate-500">Time: Null</span>
+                    </div>
+                    <div class="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                        <div id="pass-bar" class="h-full bg-slate-700 transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
             `;
+        }
+
+        // --- HANDLERS ---
+        function attachNmapListeners() {
+            const btn = document.getElementById('nmap-run-btn');
+            if(!btn) return;
+            btn.onclick = () => {
+                const consoleDiv = document.getElementById('nmap-console');
+                const target = document.getElementById('nmap-target').value;
+                const flags = document.getElementById('nmap-flags').value;
+                btn.disabled = true;
+                consoleDiv.innerHTML = `<span class="animate-pulse font-bold">[!] Initializing probe on ${target}...</span>`;
+                setTimeout(() => {
+                    consoleDiv.innerHTML = `
+                        Nmap scan report for ${target}<br>
+                        Host is up (0.0042s latency).<br>
+                        Not shown: 998 closed ports<br>
+                        PORT     STATE SERVICE<br>
+                        22/tcp   open  ssh<br>
+                        80/tcp   open  http<br>
+                        443/tcp  open  https<br><br>
+                        <span class="text-white font-bold">Scan complete. 1 IP address scanned.</span>
+                    `;
+                    btn.disabled = false;
+                }, 1500);
+            };
+        }
+
+        function attachDorkListeners() {
+            document.querySelectorAll('.dork-btn').forEach(b => {
+                b.onclick = () => document.getElementById('dork-input').value = b.dataset.val;
+            });
         }
 
         function attachPasswordListeners() {
             const input = document.getElementById('pass-input');
             if(!input) return;
-
-            input.addEventListener('keyup', (e) => {
+            input.onkeyup = (e) => {
                 const p = e.target.value;
                 let score = 0;
-                if (p.length > 8) score++;
-                if (p.length > 12) score++;
-                if (/[A-Z]/.test(p)) score++;
-                if (/[0-9]/.test(p)) score++;
-                if (/[^A-Za-z0-9]/.test(p)) score++;
+                if(p.length > 6) score++;
+                if(p.length > 10) score++;
+                if(/[A-Z]/.test(p)) score++;
+                if(/[0-9]/.test(p)) score++;
+                if(/[^A-Za-z0-9]/.test(p)) score++;
 
-                const colors = ['bg-red-500', 'bg-red-400', 'bg-yellow-500', 'bg-blue-400', 'bg-green-500', 'bg-green-400'];
-                const labels = ['Very Weak', 'Weak', 'Moderate', 'Good', 'Strong', 'Uncrackable'];
-                const times = ["Instantly", "Seconds", "Minutes", "Hours/Days", "Years", "Centuries"];
+                const bar = document.getElementById('pass-bar');
+                const strength = document.getElementById('pass-strength-text');
+                const time = document.getElementById('pass-time-text');
 
-                document.getElementById('pass-bar').className = `h-full transition-all duration-500 ${colors[score]}`;
-                document.getElementById('pass-bar').style.width = `${(score / 5) * 100}%`;
-                document.getElementById('pass-strength-text').innerText = `Strength: ${labels[score]}`;
-                document.getElementById('pass-time-text').innerText = `Time to Crack: ${times[score]}`;
-            });
+                const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500', 'bg-emerald-400'];
+                const labels = ['Critical', 'Low', 'Medium', 'Good', 'Secure', 'Encryption Grade'];
+                const crack = ['Instantly', 'Minutes', 'Days', 'Years', 'Centuries', 'Eons'];
+
+                bar.className = `h-full transition-all duration-500 ${colors[score]}`;
+                bar.style.width = `${(score/5)*100}%`;
+                strength.innerText = `Security: ${labels[score]}`;
+                strength.className = score > 3 ? 'text-green-500' : 'text-slate-500';
+                time.innerText = `Time: ${crack[score]}`;
+            };
         }
-
-        // --- CONTROLLERS ---
 
         function setActiveModule(id) {
             activeModuleId = id;
             renderSidebar();
             renderContent();
-            
-            // Mobile menu logic
-            if (window.innerWidth < 768) {
-                toggleMobileMenu();
-            }
-            
-            // Scroll to top
+            if (window.innerWidth < 768 && isMobileMenuOpen) toggleMobileMenu();
             document.getElementById('main-scroll').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -567,22 +537,14 @@
             isMobileMenuOpen = !isMobileMenuOpen;
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
-
-            if (isMobileMenuOpen) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            }
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
         }
 
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
             renderSidebar();
             renderContent();
         });
-
     </script>
 </body>
 </html>
